@@ -38,14 +38,23 @@ vector<Task> parsedata(ifstream &input) {
 	while (getline(input, line)) {
 		if (line[0] == '#' || line[0] == '(') {
 			continue; // Special commands with (DISPLAY) not added yet
-		} else if (line[0] == '*' || line[0] == '&') {
+		} else if (line[0] == '*') {
+			sub = false;
 			data.insert(data.begin(), Task(trimline(line), 0));
+		} else if (line[0] == '&') {
+			sub = true;
+			data[0].subtasks.insert(data[0].subtasks.begin(), Task(trimline(line), 0));
 		} else if (line[0] == '-') {
 			if (sub == false) {
 				if (data[0].desc != "") {
 					data[0].desc.append("\n");
 				}
 				data[0].desc.append(trimline(line));
+			} else {
+				if (data[0].desc != "") {
+					data[0].subtasks[0].desc.append("\n");
+				}
+				data[0].subtasks[0].desc.append(trimline(line));
 			}
 		}
 	}
