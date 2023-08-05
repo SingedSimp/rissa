@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <format>
+#include <vector>
 #include <fstream>
 using namespace std;
 
@@ -14,6 +16,10 @@ class Task {
 			status = b;
 			desc = c;
 			subtasks = d;
+		}
+		string pprint() {
+			return std::format("Task:\n\tName: {}\n\tStatus: {}\n\tDescription: {}\n\tSubtask number: {}\n",
+					name, status, desc, subtasks.size());
 		}
 };
 
@@ -32,7 +38,7 @@ int main(int argc, char** argv) {
 	}
 
 	for (unsigned int i = 0; i < data.size(); i++) {
-		cout << data[i].name << endl;
+		cout << data[i].pprint();
 	}
 	
 }
