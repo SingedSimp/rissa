@@ -23,20 +23,39 @@ class Task {
 		}
 };
 
-int main(int argc, char** argv) {
-	ifstream input;
-	vector<Task> data;
+string trimline(string line) {
+	line.erase(0,1);
+	while (line[0] == ' ' || line[0] == '\t') {
+		line.erase(0,1);
+	}
+	return line;
+};
+
+vector<Task> parsedata(ifstream &input) {
 	string line;
-	input.open(argv[1]);
+	vector<Task> data;
 	bool sub = false;
 	while (getline(input, line)) {
 		if (line[0] == '#' || line[0] == '(') {
 			continue; // Special commands with (DISPLAY) not added yet
-		} else if (line[0] == '*' || line[0] == '&' || line[0] == '-') {
-			data.push_back(Task(line, 0));
+		} else if (line[0] == '*' || line[0] == '&') {
+			data.insert(data.begin(), Task(trimline(line), 0));
+		} else if (line[0] == '-') {
+			if (sub == false) {
+				if (data[0].desc != "") {
+					data[0].desc.append("\n");
+				}
+				data[0].desc.append(trimline(line));
+			}
 		}
 	}
+	return data;
+};
 
+int main(int argc, char** argv) {
+	ifstream input;
+	input.open(argv[1]);
+	vector<Task> data = parsedata(input);
 	for (unsigned int i = 0; i < data.size(); i++) {
 		cout << data[i].pprint();
 	}
