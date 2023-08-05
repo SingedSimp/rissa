@@ -1,2 +1,8 @@
+cc = g++
+ifeq ($(shell uname -s),Darwin)
+	cc = g++-13
+endif
+
+
 main:
-	g++ main.cpp -Wall -Wextra -g -O0 -std=c++20 -o task.out
+	$(cc) main.cpp -Wall -Wextra -g -O0 -std=gnu++20 -o task.out 
