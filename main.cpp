@@ -17,7 +17,7 @@ class Task {
 			desc = c;
 			subtasks = d;
 		}
-		string pprint(char sep = 0) {
+		string pprint(string sep = "") { // Prints summary of task
 			string about;
 			if (desc == "") {
 				about = "None";
@@ -26,17 +26,17 @@ class Task {
 			}
 			string out = std::format("{0}Task:\n{0}\tName: {1}\n{0}\tStatus: {2}\n{0}\tDescription: {3}\n{0}\tSubtask amount: {4}\n",
 					sep, name, status, about, subtasks.size());
-			for (unsigned int i = 0; i < subtasks.size(); i++) {
-				out.append(subtasks[i].pprint('\t'));
+			for (unsigned int i = 0; i < subtasks.size(); i++) { // Print each subtask as well, indended with tab
+				out.append(subtasks[i].pprint(std::format("{}\t", sep))); // Uses format to recursively indend nested subtasks
 			}
 			return out;
 
 		}
 };
 
-string trimline(string line) {
-	line.erase(0,1);
-	while (line[0] == ' ' || line[0] == '\t') {
+string trimline(string line) { // Gets text from line
+	line.erase(0,1); // Trims content indicator (symbol)
+	while (line[0] == ' ' || line[0] == '\t') { // Trims whitespace
 		line.erase(0,1);
 	}
 	return line;
