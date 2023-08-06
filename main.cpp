@@ -17,9 +17,20 @@ class Task {
 			desc = c;
 			subtasks = d;
 		}
-		string pprint() {
-			return std::format("Task:\n\tName: {}\n\tStatus: {}\n\tDescription: {}\n\tSubtask number: {}\n",
-					name, status, desc, subtasks.size());
+		string pprint(char sep = 0) {
+			string about;
+			if (desc == "") {
+				about = "None";
+			} else {
+				about = desc;
+			}
+			string out = std::format("{0}Task:\n{0}\tName: {1}\n{0}\tStatus: {2}\n{0}\tDescription: {3}\n{0}\tSubtask amount: {4}\n",
+					sep, name, status, about, subtasks.size());
+			for (unsigned int i = 0; i < subtasks.size(); i++) {
+				out.append(subtasks[i].pprint('\t'));
+			}
+			return out;
+
 		}
 };
 
