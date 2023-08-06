@@ -5,7 +5,7 @@
 #include <fstream>
 using namespace std;
 
-class Task {
+class Task { 
 	public:
 		string name;
 		int status;
@@ -31,22 +31,22 @@ string trimline(string line) {
 	return line;
 };
 
-vector<Task> parsedata(ifstream &input) {
+vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 	string line;
 	vector<Task> data;
-	bool sub = false;
+	bool sub = false; // Changes adding descriptions from tasks to subtasks
 	while (getline(input, line)) {
-		if (line[0] == '#' || line[0] == '(') {
+		if (line[0] == '#' || line[0] == '(') { // Comments
 			continue; // Special commands with (DISPLAY) not added yet
-		} else if (line[0] == '*') {
+		} else if (line[0] == '*') { // Main tasks
 			sub = false;
 			data.insert(data.begin(), Task(trimline(line), 0));
-		} else if (line[0] == '&') {
+		} else if (line[0] == '&') { // Subtasks
 			sub = true;
 			data[0].subtasks.insert(data[0].subtasks.begin(), Task(trimline(line), 0));
-		} else if (line[0] == '-') {
+		} else if (line[0] == '-') { // Task & subtask descriptions
 			if (sub == false) {
-				if (data[0].desc != "") {
+				if (data[0].desc != "") { // Add newlines, if multiple descriptions given
 					data[0].desc.append("\n");
 				}
 				data[0].desc.append(trimline(line));
