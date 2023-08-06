@@ -3,13 +3,15 @@
 * Read chapter of book
 - Currently reading The Shadow of the Empire
 * Finish current project
-& (BACKLOG) Complete readme
-- Will be completed later
-- Does it really matter anyways?
-& (DONE) Create makefile
-& (IN PROGRESS) Write Example Input
-- Should be robust and shows most input cases
-& (TODO) Make program
+	& (BACKLOG) Complete readme
+		- Will be completed later
+		- Does it really matter anyways?
+	& (DONE) Create makefile
+	& (IN PROGRESS) Write Example Input
+		- Should be robust and shows most input cases
+	& (TODO) Make program
+		$ Probably covered by the other things but w/e
+			- It is kinda cool tho
 # Possible feature of showing youtube videos from rss
 (DISPLAY [@NerissaRavencroft] UPCOMING)
 (DISPLAY [@JUNstarias] LATEST)

@@ -34,11 +34,17 @@ class Task {
 		}
 };
 
-string trimline(string line) { // Gets text from line
-	line.erase(0,1); // Trims content indicator (symbol)
-	while (line[0] == ' ' || line[0] == '\t') { // Trims whitespace
+string trimwhite(string line) { // Trims starting whitespace, to get symbol
+	while (line[0] == ' ' || line[0] == '\t') { // Remover chars until content
 		line.erase(0,1);
 	}
+	return line;
+}
+
+string trimline(string line) { // Gets text from line
+	line = trimwhite(line);
+	line.erase(0,1); // Trims content indicator (symbol)
+	line = trimwhite(line); // Must be ran twice to trim whitespace on both sides of indicator
 	return line;
 };
 
@@ -46,26 +52,39 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 	string line;
 	vector<Task> data;
 	bool sub = false; // Changes adding descriptions from tasks to subtasks
+	bool sub2 = false; // Possibly could be a number to support unlimited nested subtasks
 	while (getline(input, line)) {
-		if (line[0] == '#' || line[0] == '(') { // Comments
+		string cleanline = trimwhite(line);
+		if (cleanline[0] == '#' || cleanline[0] == '(') { // Comments
 			continue; // Special commands with (DISPLAY) not added yet
-		} else if (line[0] == '*') { // Main tasks
+		} else if (cleanline[0] == '*') { // Main tasks
 			sub = false;
+			sub2 = false;
 			data.insert(data.begin(), Task(trimline(line), 0));
-		} else if (line[0] == '&') { // Subtasks
+		} else if (cleanline[0] == '&') { // Subtasks
 			sub = true;
+			sub2 = false;
 			data[0].subtasks.insert(data[0].subtasks.begin(), Task(trimline(line), 0));
-		} else if (line[0] == '-') { // Task & subtask descriptions
-			if (sub == false) {
+		} else if (cleanline[0] == '$') { // Nested subtasks
+			sub = false;
+			sub2 = true;
+			data[0].subtasks[0].subtasks.insert(data[0].subtasks[0].subtasks.begin(), Task(trimline(line), 0));
+		} else if (cleanline[0] == '-') { // Task & subtask descriptions
+			if (sub == false && sub2 == false) {
 				if (data[0].desc != "") { // Add newlines, if multiple descriptions given
 					data[0].desc.append("\n");
 				}
 				data[0].desc.append(trimline(line));
-			} else {
-				if (data[0].desc != "") {
+			} else if (sub) {
+				if (data[0].subtasks[0].desc != "") {
 					data[0].subtasks[0].desc.append("\n");
 				}
 				data[0].subtasks[0].desc.append(trimline(line));
+			} else if (sub2) {
+				if (data[0].subtasks[0].subtasks[0].desc != "") {
+					data[0].subtasks[0].subtasks[0].desc.append("\n");
+				}
+				data[0].subtasks[0].subtasks[0].desc.append(trimline(line));
 			}
 		}
 	}
