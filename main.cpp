@@ -95,8 +95,19 @@ int main(int argc, char** argv) {
 	ifstream input;
 	input.open(argv[1]);
 	vector<Task> data = parsedata(input);
-	for (unsigned int i = 0; i < data.size(); i++) {
-		cout << data[i].pprint();
+	if (argc == 1) {
+		throw std::invalid_argument("Input file not given");
+	} else if (argc == 2) {
+		for (unsigned int i = 0; i < data.size(); i++) {
+			cout << data[i].pprint();
+		}
+	} else {
+		ofstream output;
+		output.open(argv[2]);
+		for (unsigned int i = 0; i < data.size(); i++) {
+			output << data[i].pprint();
+		}
 	}
+
 	
 }
