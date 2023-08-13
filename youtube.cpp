@@ -20,7 +20,7 @@ string getChannelId (string customurl) {
 	// Filter URL with ID from file
 	string query = "(\"https://www.youtube.com/channel/)(.*?)([\"?])";
 	ifstream channel;
-	channel.open("./tmp/@NerissaRavenCroft"); // Temp testing file, will be removed later
+	channel.open(format("/tmp/rissa/{}", customurl)); // Temp testing file, will be removed later
 	string line;
 	string id;
 	while (getline(channel, line) && id.empty()) {
@@ -45,7 +45,10 @@ int main (int argc, char** argv) {
 		throw std::invalid_argument("No ID Given");
 	} else { // Turn into function later
 		if (argv[1][0] == '@') { // If personalized URL is provided
-			cout << getChannelId(argv[1]) << endl;
+			string purl = argv[1];
+			// Not sure how to guarentee script is in $PATH
+			system((format("./wgetchannel.sh {}", purl)).c_str());
+			cout << getChannelId(purl) << endl;
 		}
 	}
 }
