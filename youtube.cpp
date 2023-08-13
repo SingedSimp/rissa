@@ -5,6 +5,9 @@
 #include <fstream>
 using namespace std;
 
+// TODO: Get upcoming livestream start time with startTime on youtube html page
+// TODO: Get latest video from youtube rss
+
 string url2id (string url) {
 	string::difference_type count = std::count(url.begin(), url.end(), '/');
 	while (count != 0) {
