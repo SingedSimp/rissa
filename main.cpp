@@ -24,10 +24,10 @@ class Task {
 			} else {
 				about = desc;
 			}
-			string out = std::format("{0}Task:\n{0}\tName: {1}\n{0}\tStatus: {2}\n{0}\tDescription: {3}\n{0}\tSubtask amount: {4}\n",
+			string out = format("{0}Task:\n{0}\tName: {1}\n{0}\tStatus: {2}\n{0}\tDescription: {3}\n{0}\tSubtask amount: {4}\n",
 					sep, name, status, about, subtasks.size());
 			for (unsigned int i = 0; i < subtasks.size(); i++) { // Print each subtask as well, indended with tab
-				out.append(subtasks[i].pprint(std::format("{}\t", sep))); // Uses format to recursively indend nested subtasks
+				out.append(subtasks[i].pprint(format("{}\t", sep))); // Uses format to recursively indend nested subtasks
 			}
 			return out;
 
@@ -55,7 +55,7 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 	bool sub2 = false; // Possibly could be a number to support unlimited nested subtasks
 	while (getline(input, line)) {
 		string cleanline = trimwhite(line);
-		if (cleanline[0] == '#' || cleanline[0] == '(') { // Comments
+		if (cleanline[0] == '#') { // Comments
 			continue; // Special commands with (DISPLAY) not added yet
 		} else if (cleanline[0] == '*') { // Main tasks
 			sub = false;
@@ -86,6 +86,11 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 				}
 				data[0].subtasks[0].subtasks[0].desc.append(trimline(line));
 			}
+		} else if (cleanline[0] == '(') { // Cover special commands, only (DISPLAY for now)
+			if (cleanline[0].find("(DISPLAY") != string::npos) {
+				// Second word is channel id/channel url ending
+				// Third word is upcoming/latest (live/video)	
+			}
 		}
 	}
 	return data;
@@ -96,7 +101,7 @@ int main(int argc, char** argv) {
 	input.open(argv[1]);
 	vector<Task> data = parsedata(input);
 	if (argc == 1) {
-		throw std::invalid_argument("Input file not given");
+		throw invalid_argument("Input file not given");
 	} else if (argc == 2) {
 		for (unsigned int i = 0; i < data.size(); i++) {
 			cout << data[i].pprint();

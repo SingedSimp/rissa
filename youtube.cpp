@@ -82,7 +82,7 @@ int main (int argc, char** argv) {
 			string purl = argv[1];
 			// Not sure how to guarentee script is in $PATH
 			system((format("./wgetchannel.sh {}", purl)).c_str());
-			cout << getChannelId(purl) << endl;
+			// cout << getChannelId(purl) << endl; // Print channel ID
 			cout << chrono::sys_seconds{chrono::seconds(getNextLive(purl))} << endl;
 		}
 	}

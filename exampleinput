@@ -12,6 +12,7 @@
 	& (TODO) Make program
 		$ Probably covered by the other things but w/e
 			- It is kinda cool tho
+* New project - Hololive themed fire emblem clone?
 # Possible feature of showing youtube videos from rss
-(DISPLAY [@NerissaRavencroft] UPCOMING)
-(DISPLAY [@JUNstarias] LATEST)
+(DISPLAY @NerissaRavencroft UPCOMING)
+(DISPLAY @JUNstarias LATEST)
