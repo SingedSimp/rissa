@@ -3,6 +3,7 @@
 #include <format>
 #include <regex>
 #include <fstream>
+#include <chrono>
 using namespace std;
 
 // TODO: Get upcoming livestream start time with startTime on youtube html page
@@ -23,7 +24,7 @@ string getChannelId (string customurl) {
 	// Filter URL with ID from file
 	string query = "(\"https://www.youtube.com/channel/)(.*?)([\"?])";
 	ifstream channel;
-	channel.open(format("/tmp/rissa/{}", customurl)); // Temp testing file, will be removed later
+	channel.open(format("/tmp/rissa/{}", customurl));
 	string line;
 	string id;
 	while (getline(channel, line) && id.empty()) {
@@ -43,6 +44,36 @@ string getChannelId (string customurl) {
 	return url2id(id);
 }
 
+int getStartTime(string fullTime) {
+	string startTime = "";
+	for (unsigned int i = 0; i < fullTime.size(); i++) {
+		if (isdigit(fullTime[i])) {
+			startTime.push_back(fullTime[i]);
+		}
+	}
+	return stoi(startTime);
+}
+
+int getNextLive(string fileName) {
+	string query = "(\"startTime\")(.*?)(\",\")";
+	ifstream file;
+	file.open(format("/tmp/rissa/{}", fileName));
+	string line;
+	string startTime;
+	while (getline(file, line) && startTime.empty()) {
+		regex rgx(query);
+		smatch utime;
+		regex_search(line, utime, rgx);
+		if (utime[0] != "") {
+			startTime = utime[0];
+		}
+	}
+	int TZ = -14400; // SET UTC TIMEZONE OFFSET HERE
+	return getStartTime(startTime)+TZ;
+
+}
+
+
 int main (int argc, char** argv) {
 	if (argc == 1) {
 		throw std::invalid_argument("No ID Given");
@@ -52,6 +83,7 @@ int main (int argc, char** argv) {
 			// Not sure how to guarentee script is in $PATH
 			system((format("./wgetchannel.sh {}", purl)).c_str());
 			cout << getChannelId(purl) << endl;
+			cout << chrono::sys_seconds{chrono::seconds(getNextLive(purl))} << endl;
 		}
 	}
 }
