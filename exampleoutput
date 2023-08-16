@@ -1,46 +1,46 @@
 Task:
-	Name: New project - Hololive themed fire emblem clone?
-	Status: 0
+	Name: New project - fire emblem clone?
+	Status: TODO
 	Description: None
 	Subtask amount: 0
 Task:
 	Name: Next livestream - @NerissaRavencroft
-	Status: 0
-	Description: 2025-09-01 00:45:00
+	Status: TODO
+	Description: 2023-08-16 21:00:00
 	Subtask amount: 0
 Task:
 	Name: Finish current project
-	Status: 0
+	Status: TODO
 	Description: None
 	Subtask amount: 4
 	Task:
 		Name: (TODO) Make program
-		Status: 0
+		Status: TODO
 		Description: None
 		Subtask amount: 1
 		Task:
 			Name: Probably covered by the other things but w/e
-			Status: 0
+			Status: TODO
 			Description: It is kinda cool tho
 			Subtask amount: 0
 	Task:
 		Name: (IN PROGRESS) Write Example Input
-		Status: 0
+		Status: IN PROGRESS
 		Description: Should be robust and shows most input cases
 		Subtask amount: 0
 	Task:
 		Name: (DONE) Create makefile
-		Status: 0
+		Status: DONE
 		Description: None
 		Subtask amount: 0
 	Task:
-		Name: (BACKLOG) Complete readme
-		Status: 0
+		Name: Complete readme
+		Status: TODO
 		Description: Will be completed later
 Does it really matter anyways?
 		Subtask amount: 0
 Task:
 	Name: Read chapter of book
-	Status: 0
+	Status: TODO
 	Description: Currently reading The Shadow of the Empire
 	Subtask amount: 0
