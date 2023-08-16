@@ -9,6 +9,8 @@
 #include "youtube.h"
 using namespace std;
 
+const string statuses[3] = {"TODO", "IN PROGRESS", "DONE"};
+
 class Task { 
 	public:
 		string name;
@@ -29,7 +31,7 @@ class Task {
 				about = desc;
 			}
 			string out = format("{0}Task:\n{0}\tName: {1}\n{0}\tStatus: {2}\n{0}\tDescription: {3}\n{0}\tSubtask amount: {4}\n",
-					sep, name, status, about, subtasks.size());
+					sep, name, statuses[status], about, subtasks.size());
 			for (unsigned int i = 0; i < subtasks.size(); i++) { // Print each subtask as well, indended with tab
 				out.append(subtasks[i].pprint(format("{}\t", sep))); // Uses format to recursively indend nested subtasks
 			}
@@ -90,15 +92,39 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 		} else if (cleanline[0] == '*') { // Main tasks
 			sub = false;
 			sub2 = false;
-			data.insert(data.begin(), Task(trimline(line), 0));
+			int status = 0;
+			if (cleanline.find("(TODO)") != string::npos) {
+				status = 0;	
+			} else if (cleanline.find("(IN PROGRESS)") != string::npos) {
+				status = 1;
+			} else if (cleanline.find("(DONE)") != string::npos) {
+				status = 2;
+			} 
+			data.insert(data.begin(), Task(trimline(line), status));
 		} else if (cleanline[0] == '&') { // Subtasks
 			sub = true;
 			sub2 = false;
-			data[0].subtasks.insert(data[0].subtasks.begin(), Task(trimline(line), 0));
+			int status = 0;
+			if (cleanline.find("(TODO)") != string::npos) {
+				status = 0;	
+			} else if (cleanline.find("(IN PROGRESS)") != string::npos) {
+				status = 1;
+			} else if (cleanline.find("(DONE)") != string::npos) {
+				status = 2;
+			} 
+			data[0].subtasks.insert(data[0].subtasks.begin(), Task(trimline(line), status));
 		} else if (cleanline[0] == '$') { // Nested subtasks
 			sub = false;
 			sub2 = true;
-			data[0].subtasks[0].subtasks.insert(data[0].subtasks[0].subtasks.begin(), Task(trimline(line), 0));
+			int status = 0;
+			if (cleanline.find("(TODO)") != string::npos) {
+				status = 0;	
+			} else if (cleanline.find("(IN PROGRESS)") != string::npos) {
+				status = 1;
+			} else if (cleanline.find("(DONE)") != string::npos) {
+				status = 2;
+			} 
+			data[0].subtasks[0].subtasks.insert(data[0].subtasks[0].subtasks.begin(), Task(trimline(line), status));
 		} else if (cleanline[0] == '-') { // Task & subtask descriptions
 			if (sub == false && sub2 == false) {
 				if (data[0].desc != "") { // Add newlines, if multiple descriptions given
