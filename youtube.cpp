@@ -3,10 +3,10 @@
 #include <format>
 #include <regex>
 #include <fstream>
-#include <chrono>
-using namespace std;
+// #include <chrono>
+#include "youtube.h"
 
-// TODO: Get upcoming livestream start time with startTime on youtube html page
+using namespace std;
 // TODO: Get latest video from youtube rss
 
 string url2id (string url) {
@@ -51,6 +51,9 @@ int getStartTime(string fullTime) {
 			startTime.push_back(fullTime[i]);
 		}
 	}
+	if (startTime == "") {
+		return 0;
+	}
 	return stoi(startTime);
 }
 
@@ -68,12 +71,14 @@ int getNextLive(string fileName) {
 			startTime = utime[0];
 		}
 	}
+	if (getStartTime(startTime) == 0) {
+		return 0;
+	}
 	int TZ = -14400; // SET UTC TIMEZONE OFFSET HERE
 	return getStartTime(startTime)+TZ;
 
 }
-
-
+/*
 int main (int argc, char** argv) {
 	if (argc == 1) {
 		throw std::invalid_argument("No ID Given");
@@ -87,3 +92,4 @@ int main (int argc, char** argv) {
 		}
 	}
 }
+*/
