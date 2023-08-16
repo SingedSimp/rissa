@@ -1,8 +1,12 @@
+
+
 #include <iostream>
-#include <string>
-#include <format>
 #include <vector>
+#include <format>
+#include <chrono>
+#include <string>
 #include <fstream>
+#include "youtube.h"
 using namespace std;
 
 class Task { 
@@ -48,6 +52,19 @@ string trimline(string line) { // Gets text from line
 	return line;
 };
 
+string cleanpurl(string line) { // Assumes @url is in line
+	line = trimwhite(line);
+	while (line[0] != '@') {
+		line.erase(0,1);
+	}
+	line.erase(line.size()-1,1); // Trim trailing space, just in case
+	while (line[line.size()-1] != ' ') {
+		line.erase(line.size()-1,1);
+	}
+	line.erase(line.size()-1,1); // Trim trailing space, not jic
+	return line;
+}
+
 vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 	string line;
 	vector<Task> data;
@@ -57,6 +74,19 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 		string cleanline = trimwhite(line);
 		if (cleanline[0] == '#') { // Comments
 			continue; // Special commands with (DISPLAY) not added yet
+		} else if (cleanline[0] == '(') { // Cover special commands, only (DISPLAY for now)
+			if (cleanline[1] == 'D') {
+				string purl = cleanpurl(line); 
+				system((format("./wgetchannel.sh {}", purl)).c_str());
+				if (getNextLive(purl) == 0) {
+					continue;
+				}
+				data.insert(data.begin(), Task(format("Next livestream - {}", purl), 0));
+				string event = format("{}", chrono::sys_seconds{chrono::seconds{getNextLive(purl)}});
+				data[0].desc.append(event);
+				// Second word is channel id/channel url ending
+				// Third word is upcoming/latest (live/video)	
+			}
 		} else if (cleanline[0] == '*') { // Main tasks
 			sub = false;
 			sub2 = false;
@@ -86,12 +116,7 @@ vector<Task> parsedata(ifstream &input) { // Turn input file into tasks
 				}
 				data[0].subtasks[0].subtasks[0].desc.append(trimline(line));
 			}
-		} else if (cleanline[0] == '(') { // Cover special commands, only (DISPLAY for now)
-			if (cleanline[0].find("(DISPLAY") != string::npos) {
-				// Second word is channel id/channel url ending
-				// Third word is upcoming/latest (live/video)	
-			}
-		}
+		}	
 	}
 	return data;
 };
